@@ -1,14 +1,37 @@
-'use sctrict'
+'use strict'
+const CLASS_DELETE_BTN = 'deleteBtn'
+const CLASS_CONTACT_ROW = '.main-table__tr'
 const form = document.querySelector('#contactForm')
 const table = document.querySelector('#table')
 
 form.addEventListener('submit', onFormSubmit)
+table.addEventListener('click', onTableContactClick)
+inputName.focus()
 
-function onFormSubmit(event){    
+function onFormSubmit(e){
+    e.preventDefault()
     const contact = getData()
-    console.log(contact)
-    event.preventdefault() 
+    clearInputs()
+    inputName.focus()
+    if(!isDataValid(contact)){
+        showError()
+        return
+    }  
     createTableRowWithNewData(contact) 
+}
+function onTableContactClick(e){
+    const target = e.target
+    const contactRow = findContactRow(target)
+    if(contactRow.style.backgroundColor === 'white'){
+        contactRow.style.backgroundColor = 'green'
+    }
+    else{
+        contactRow.style.backgroundColor = 'white'
+    }
+    if(target.classList.contains(CLASS_DELETE_BTN)) contactRow.remove()
+}
+function findContactRow(element){
+    return element.closest(CLASS_CONTACT_ROW)
 }
 function getData(){
     return {
@@ -16,6 +39,9 @@ function getData(){
         surname: form.inputSurname.value,
         phone: form.inputPhone.value
     }
+}
+function isDataValid(data){
+    return isValidName(data.name) && isValidName(data.surname) && isNumber(data.phone)
 }
 function createTableRowWithNewData(data){
     const HTMLTemplate = `
@@ -37,4 +63,20 @@ function createTableRowWithNewData(data){
     </tr>
     `
     table.insertAdjacentHTML('beforeend', HTMLTemplate)
+}
+
+function clearInputs(){
+    form.reset()
+}
+function showError(){
+    alert('Введенные данные не валидны!')
+}
+function isNotEmpty (value){
+    return value.trim()
+}
+function isNumber (value){
+    return !isNaN(value) && isNotEmpty(value)
+}
+function isValidName (value){
+    return isNotEmpty(value) && !isNumber(value)
 }
