@@ -30,18 +30,12 @@ function onTableContactClick(e){
     }
     if(target.classList.contains(CLASS_DELETE_BTN)) contactRow.remove()
 }
-function findContactRow(element){
-    return element.closest(CLASS_CONTACT_ROW)
-}
 function getData(){
     return {
         name: form.inputName.value,
         surname: form.inputSurname.value,
         phone: form.inputPhone.value
     }
-}
-function isDataValid(data){
-    return isValidName(data.name) && isValidName(data.surname) && isNumber(data.phone)
 }
 function createTableRowWithNewData(data){
     const HTMLTemplate = `
@@ -64,7 +58,12 @@ function createTableRowWithNewData(data){
     `
     table.insertAdjacentHTML('beforeend', HTMLTemplate)
 }
-
+function findContactRow(element){
+    return element.closest(CLASS_CONTACT_ROW)
+}
+function isDataValid(data){
+    return isValidName(data.name) && isValidName(data.surname) && isNumber(data.phone)
+}
 function clearInputs(){
     form.reset()
 }
