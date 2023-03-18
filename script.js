@@ -19,17 +19,14 @@ function onFormSubmit(e){
     }  
     createTableRowWithNewData(contact) 
 }
+
 function onTableContactClick(e){
     const target = e.target
     const contactRow = findContactRow(target)
-    if(contactRow.style.backgroundColor === 'white'){
-        contactRow.style.backgroundColor = 'green'
-    }
-    else{
-        contactRow.style.backgroundColor = 'white'
-    }
-    if(target.classList.contains(CLASS_DELETE_BTN)) contactRow.remove()
+    changeColorContactRow(contactRow)
+    deleteRow(target, contactRow)
 }
+
 function getData(){
     return {
         name: form.inputName.value,
@@ -37,6 +34,7 @@ function getData(){
         phone: form.inputPhone.value
     }
 }
+
 function createTableRowWithNewData(data){
     const HTMLTemplate = `
     <tr class='main-table__tr'>
@@ -58,24 +56,44 @@ function createTableRowWithNewData(data){
     `
     table.insertAdjacentHTML('beforeend', HTMLTemplate)
 }
+
 function findContactRow(element){
     return element.closest(CLASS_CONTACT_ROW)
 }
+
+function deleteRow(target, row){
+    if(target.classList.contains(CLASS_DELETE_BTN)) row.remove()
+}
+
+function changeColorContactRow(row){
+    if(row.style.backgroundColor === 'white'){
+        row.style.backgroundColor = 'green'
+    }
+    else{
+        row.style.backgroundColor = 'white'
+    }
+}
+
 function isDataValid(data){
     return isValidName(data.name) && isValidName(data.surname) && isNumber(data.phone)
 }
+
 function clearInputs(){
     form.reset()
 }
+
 function showError(){
     alert('Введенные данные не валидны!')
 }
+
 function isNotEmpty (value){
     return value.trim()
 }
+
 function isNumber (value){
     return !isNaN(value) && isNotEmpty(value)
 }
+
 function isValidName (value){
     return isNotEmpty(value) && !isNumber(value)
 }
